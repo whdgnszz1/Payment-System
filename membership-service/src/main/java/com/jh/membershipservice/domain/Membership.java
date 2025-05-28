@@ -1,22 +1,41 @@
 package com.jh.membershipservice.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Schema(description = "회원 정보")
 public class Membership {
     /**
      * The baseline balance of the account. This was the balance of the account before the first
      * activity in the activityWindow.
      */
-    @Getter private final String membershipId;
-    @Getter private final String name;
-    @Getter private final String email;
-    @Getter private final String address;
-    @Getter private final boolean isValid;
-    @Getter private final String aggregateIdentifier;
+    @Getter 
+    @Schema(description = "회원 ID", example = "1")
+    private final String membershipId;
+    
+    @Getter 
+    @Schema(description = "회원 이름", example = "홍길동")
+    private final String name;
+    
+    @Getter 
+    @Schema(description = "회원 이메일", example = "hong@example.com")
+    private final String email;
+    
+    @Getter 
+    @Schema(description = "회원 주소", example = "서울시 강남구")
+    private final String address;
+    
+    @Getter 
+    @Schema(description = "회원 유효성", example = "true")
+    private final boolean isValid;
+    
+    @Getter 
+    @Schema(description = "집계 식별자")
+    private final String aggregateIdentifier;
 
     public static Membership generateMember(
             MembershipId membershipId, MembershipName membershipName, MembershipEmail membershipEmail, MembershipAddress membershipAddress, MembershipIsValid membershipIsValid,

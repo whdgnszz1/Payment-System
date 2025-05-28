@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.axonframework:axon-spring-boot-starter:4.9.1'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation project(path: ':common')
 	compileOnly 'org.projectlombok:lombok'

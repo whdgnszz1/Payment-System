@@ -29,3 +29,17 @@ axon:
     general: jackson
     events: jackson
     messages: jackson
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    tags-sorter: alpha
+    operations-sorter: alpha
+  packages-to-scan: com.jh.membershipservice
+  paths-to-match: /**
+  info:
+    title: Membership Service API
+    description: Payment System - Membership Service API
+    version: 1.0.0
