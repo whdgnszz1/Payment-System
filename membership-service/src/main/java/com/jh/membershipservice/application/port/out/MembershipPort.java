@@ -2,7 +2,7 @@ package com.jh.membershipservice.application.port.out;
 
 import com.jh.membershipservice.domain.Membership;
 
-public interface RegisterMembershipPort {
+public interface MembershipPort {
 
     Membership createMembership(
         Membership.MembershipName membershipName
@@ -10,5 +10,9 @@ public interface RegisterMembershipPort {
         , Membership.MembershipAddress membershipAddress
         , Membership.MembershipIsValid membershipIsValid
         , Membership.MembershipAggregateIdentifier membershipAggregateIdentifier
+    );
+
+    Membership findMembership(
+            Membership.MembershipId membershipId
     );
 }

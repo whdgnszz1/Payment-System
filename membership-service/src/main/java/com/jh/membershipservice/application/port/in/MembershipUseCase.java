@@ -7,4 +7,6 @@ import com.jh.membershipservice.domain.Membership;
 public interface MembershipUseCase {
 
     Membership registerMembership(RegisterMembershipCommand registerMembershipCommand);
+
+    Membership findMembership(FindMembershipCommand command);
 }
