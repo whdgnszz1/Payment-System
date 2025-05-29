@@ -1,0 +1,69 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: membership-service
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/payment?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:rootpassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    properties:
+      hibernate:
+        dialect: ${SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT:org.hibernate.dialect.MySQLDialect}
+        show_sql: false
+        format_sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+axon:
+  axonserver:
+    enabled: false
+  eventhandling:
+    processors:
+      default:
+        mode: subscribing
+  serializer:
+    general: jackson
+    events: jackson
+    messages: jackson
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    tags-sorter: alpha
+    operations-sorter: alpha
+  packages-to-scan: com.jh.membershipservice
+  paths-to-match: /**
+  info:
+    title: Membership Service API
+    description: Payment System - Membership Service API (Docker)
+    version: 1.0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.jh.membershipservice: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN

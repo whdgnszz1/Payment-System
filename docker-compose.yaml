@@ -1,0 +1,90 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: payment-mysql
+    networks:
+      - payment_system
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    ports:
+      - "3306:3306"
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_DATABASE=payment
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  axon-server:
+    container_name: axon-server
+    image: axoniq/axonserver:2023.2.0
+    networks:
+      - payment_system
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+    volumes:
+      - axonserver-data:/axonserver/data
+      - axonserver-events:/axonserver/events
+      - axonserver-config:/axonserver/config:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8024/actuator/health"]
+      timeout: 10s
+      retries: 5
+
+  membership-service:
+    image: membership-service:0.0.1-SNAPSHOT
+    container_name: membership-service
+    networks:
+      - payment_system
+    ports:
+      - "9000:9000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/payment?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/actuator/health"]
+      timeout: 10s
+      retries: 5
+
+volumes:
+  axonserver-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PWD}/axon-server-se/data
+  axonserver-events:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PWD}/axon-server-se/events
+  axonserver-config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ${PWD}/axon-server-se/config
+
+networks:
+  payment_system:
+    driver: bridge
