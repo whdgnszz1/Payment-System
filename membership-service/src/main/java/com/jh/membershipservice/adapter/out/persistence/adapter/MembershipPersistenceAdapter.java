@@ -25,8 +25,8 @@ public class MembershipPersistenceAdapter implements MembershipPort {
         MembershipEntity savedEntity = membershipRepository.save(
             new MembershipEntity(
                 membershipName.getNameValue(),
-                membershipEmail.getEmailValue(),
                 membershipAddress.getAddressValue(),
+                membershipEmail.getEmailValue(),
                 membershipIsValid.isValidValue(),
                 membershipAggregateIdentifier.getAggregateIdentifier()
             )
